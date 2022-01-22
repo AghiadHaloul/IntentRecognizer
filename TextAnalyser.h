@@ -18,6 +18,7 @@ private:
     unordered_set<string> topics_list;
     unordered_set<string> locations_list;
     unordered_set<string> times_list;
+    unordered_set<string> stop_words;
 };
 
 

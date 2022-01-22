@@ -21,6 +21,10 @@ unordered_map<string, string> TextAnalyser::get_attributes(const string& input) 
         words_vec.push_back(tmp_word);
     }
     for (auto w : words_vec) {
+        // Skip, if the word is in the stop words list
+        if (stop_words.find(w) != stop_words.end()) {
+            continue;
+        }
         // Check if the word is a topic:
         if (topics_list.find(w) != topics_list.end()) {
             attributes["topic"] = w;
@@ -41,11 +45,10 @@ unordered_map<string, string> TextAnalyser::get_attributes(const string& input) 
 }
 
 TextAnalyser::TextAnalyser() {
-    topics_list = {"weather", "fact", "directions", "reminder"}; // Can be extended here.
-    times_list = {"today", "now", "tomorrow", "o'clock", "Uhr"}; // Can be extended here.
-    // locations_list will be populated from a file.
-    // License: CC BY 4.0
-    // Dataset Identifier: geonames-all-cities-with-a-population-1000@public
+    topics_list = {"weather", "fact", "directions", "reminder"}; // Can be read & extended from a file.
+    times_list = {"today", "now", "tomorrow", "o'clock", "Uhr"}; // Can be read & extended from a file.
+
+    // Load cities
     fstream file_stream("../data/opendatasoft/names_coordinates.csv");
     if (!file_stream.is_open()) {
         throw runtime_error("Could not open cities_list file.");
@@ -62,6 +65,17 @@ TextAnalyser::TextAnalyser() {
         }
         locations_list.insert(csv_line[0]);
     }
+    file_stream.close();
+
+    // Load the stop words:
+    file_stream.open("../data/stopwords/stop_words_en.txt");
+    if (!file_stream.is_open()) {
+        throw runtime_error("Could not open stop_words_en.txt file.");
+    }
+    while(getline(file_stream, line)) {
+        stop_words.insert(line);
+    }
+    file_stream.close();
 }
 
 string TextAnalyser::clean(const string &input) {
