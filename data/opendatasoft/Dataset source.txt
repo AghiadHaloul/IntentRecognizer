@@ -1,0 +1,11 @@
+Geonames: All cities with a population > 1000 or seats of adm div (ca 80.000)
+https://data.opendatasoft.com/explore/dataset/geonames-all-cities-with-a-population-1000%40public
+
+License: CC BY 4.0
+
+Sources : GeoNames is aggregating over hundred different data sources.
+Dataset Identifier: geonames-all-cities-with-a-population-1000@public
+Source: Public
+Publisher: GeoNames
+Reference: https://download.geonames.org/export/dump/
+Date: January 10, 2022 8:02 AM (data)

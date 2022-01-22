@@ -3,4 +3,4 @@ project(IntentRecognizer)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(IntentRecognizer main.cpp)
+add_executable(IntentRecognizer main.cpp TextAnalyser.cpp TextAnalyser.h)
