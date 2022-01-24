@@ -26,8 +26,8 @@ int main(int argc, char **argv) {
     };
     IntentRecognizer ir;
     for (auto& ex : examples) {
-        cout << ex << endl;
-        cout << ir.get_intent(ex);
+        cout << endl << ex << endl;
+        cout << ir.get_intent(ex) << endl;
     }
     string input;
     while(getline(cin, input)) {
@@ -35,7 +35,7 @@ int main(int argc, char **argv) {
             cout << "-1 was entered. Exiting the tool.";
             return 0;
         }
-        cout << ir.get_intent(input);
+        cout << ir.get_intent(input) << endl;
     }
     return 0;
 }

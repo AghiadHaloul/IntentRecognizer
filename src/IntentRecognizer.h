@@ -5,6 +5,7 @@
 #ifndef INTENTRECOGNIZER_INTENTRECOGNIZER_H
 #define INTENTRECOGNIZER_INTENTRECOGNIZER_H
 #include "TextAnalyser.h"
+#include "StringHelper.h"
 
 class IntentRecognizer {
 public:
