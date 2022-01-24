@@ -1,4 +1,4 @@
-#include "TextAnalyser.h"
+#include "IntentRecognizer.h"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -18,33 +18,24 @@ int main(int argc, char **argv) {
     //testing::InitGoogleTest(&argc, argv);
     //return RUN_ALL_TESTS();
     cout << "Welcome to the intent recognition tool.\nEnter a sentence to predict its intent (Type in '-1' at anytime to exit):\n";
-    TextAnalyser txt_analyser;
-    string input;
     vector<string> examples {
             "What is the weather like today?",
             "What is the weather like in Paris today?",
             "Tell me an interesting fact.",
             "Whats the weather tomorrow in Clausthal-Zellerfeld?"
     };
+    IntentRecognizer ir;
     for (auto& ex : examples) {
         cout << ex << endl;
-        input = txt_analyser.clean(ex);
-        unordered_map<string, string> attr = txt_analyser.get_attributes(input);
-        for (auto&[key, val]: attr) {
-            cout << key << " -> " << val << endl;
-        }
-        cout << "----------\n";
+        cout << ir.get_intent(ex);
     }
+    string input;
     while(getline(cin, input)) {
         if (input == "-1") {
             cout << "-1 was entered. Exiting the tool.";
             return 0;
         }
-        input = txt_analyser.clean(input);
-        unordered_map<string, string> attr = txt_analyser.get_attributes(input);
-        for (auto& [key,val] : attr) {
-            cout << key << " -> " << val << endl;
-        }
+        cout << ir.get_intent(input);
     }
     return 0;
 }

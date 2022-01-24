@@ -11,8 +11,8 @@
 
 using namespace std;
 
-unordered_map<string, string> TextAnalyser::get_attributes(const string& input) {
-    unordered_map<string, string> attributes;
+map<string, string> TextAnalyser::get_attributes(const string& input) {
+    map<string, string> attributes;
     vector<string> words_vec;
     string_to_words_vec(input, words_vec);
     for (int i = 0; i < words_vec.size(); i++) {
