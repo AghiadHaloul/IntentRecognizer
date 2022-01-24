@@ -11,10 +11,10 @@
 
 using namespace std;
 
-map<string, string> TextAnalyser::get_attributes(const string& input) {
-    map<string, string> attributes;
+unordered_map<string, string> TextAnalyser::get_attributes(const string& input) {
+    unordered_map<string, string> attributes;
     vector<string> words_vec;
-    string_to_words_vec(input, words_vec);
+    StringHelper::string_to_words_vec(input, words_vec);
     for (int i = 0; i < words_vec.size(); i++) {
         string w = words_vec[i];
         // Skip, if the word is in the stop words list
@@ -51,7 +51,7 @@ map<string, string> TextAnalyser::get_attributes(const string& input) {
                 if (sub_vector == potential_match) {
                     // Re-concatenate the location_words
                     string merged = "";
-                    words_vec_to_string(potential_match, merged);
+                    StringHelper::words_vec_to_string(potential_match, merged, true);
                     attributes["location"] = merged;
                     longest_name_found = potential_match.size();
                 }
@@ -67,7 +67,7 @@ map<string, string> TextAnalyser::get_attributes(const string& input) {
 }
 
 TextAnalyser::TextAnalyser() {
-    topics_list = {"weather", "fact", "directions", "reminder"}; // Can be read & extended from a file.
+    topics_list = {"weather", "fact", "directions", "reminder", "joke"}; // Can be read & extended from a file.
     times_list = {"today", "now", "tomorrow", "o'clock", "Uhr"}; // Can be read & extended from a file.
 
     // Load cities from file
@@ -92,7 +92,7 @@ TextAnalyser::TextAnalyser() {
         // to check which location the user means. For example;
         // "San" -> {{"San", "Francisco"}, {"San", "Diego"}, {"San", "Jose", "del", "Monte"}}
         vector<string> city_name_vec;
-        string_to_words_vec(city_ascii, city_name_vec);
+        StringHelper::string_to_words_vec(city_ascii, city_name_vec);
         if (city_name_vec.size() > 1) {
             string first_word = city_name_vec[0];
             multiword_locations_list[first_word].push_back(city_name_vec);
@@ -137,20 +137,4 @@ string TextAnalyser::clean(const string &input) {
     return cleaned_str;
 }
 
-void TextAnalyser::string_to_words_vec(const string &input, vector<string> &words_vec) {
-    // Convert an input string into a vector of words
-    istringstream ss(input);
-    string tmp_word;
-    while(getline(ss, tmp_word, ' ')) {
-        words_vec.push_back(tmp_word);
-    }
-}
 
-void TextAnalyser::words_vec_to_string(const vector<string> &words_vec, string &merged) {
-    for (int k = 0; k < words_vec.size(); k++) {
-        merged += words_vec[k];
-        if (k < words_vec.size() - 1) {
-            merged += ' ';
-        }
-    }
-}
