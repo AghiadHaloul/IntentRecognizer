@@ -24,7 +24,6 @@ int main(int argc, char **argv) {
             "What is the weather like today?",
             "What is the weather like in Paris today?",
             "Tell me an interesting fact.",
-            // TODO: create a map of first_word -> list of cities_beginning_with_this_word
             "Whats the weather tomorrow in Clausthal-Zellerfeld?"
     };
     for (auto& ex : examples) {
