@@ -34,3 +34,30 @@ string StringHelper::capitalize_first_char(const string &str) {
     tmp[0] = toupper(tmp[0]);
     return tmp;
 }
+
+string StringHelper::clean(const string &input) {
+    string cleaned_str = "";
+    for (int i = 0; i < input.size(); i++) {
+        // Avoid repeated empty spaces
+        if(input[i] == ' ' && cleaned_str.size() > 0 && cleaned_str[cleaned_str.size() - 1] != ' ') {
+            cleaned_str += ' ';
+            continue;
+        }
+        // Ignore non-alphanumeric digits
+        if(!isalnum(input[i])) {
+            // avoid double white spaces
+            if (cleaned_str.size() > 0 && cleaned_str[cleaned_str.size() - 1] != ' ') {
+                cleaned_str += ' ';
+            }
+            continue;
+        }
+        // Convert to lower letters
+        if (isupper(input[i])) {
+            cleaned_str += tolower(input[i]);
+            continue;
+        }
+        cleaned_str += input[i];
+    }
+    return cleaned_str;
+}
+

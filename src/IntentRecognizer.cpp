@@ -10,7 +10,7 @@ IntentRecognizer::IntentRecognizer() {
 }
 
 string IntentRecognizer::get_intent(const string& query) {
-    string input = text_analyser.clean(query);
+    string input = StringHelper::clean(query);
     unordered_map<string, string> attr = text_analyser.get_attributes(input);
     // Next, simply iterating over attr would suffice, but this will maintain the coding challenge output order
     vector<string> keywords = {"topic", "location", "time", "destination"};

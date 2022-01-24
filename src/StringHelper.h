@@ -19,6 +19,7 @@ public:
     static void string_to_words_vec(const string& input, vector<string>& words_vec);
     static void words_vec_to_string(const vector<string>& words_vec, string& merged, bool capitalize = false);
     static string capitalize_first_char(const string& str);
+    static string clean(const string& input);
 private:
 
 };
