@@ -23,17 +23,21 @@ string IntentRecognizer::get_intent(const string& query) {
         if (keyword == "topic") {
             intent += StringHelper::capitalize_first_char(attr[keyword]);
         } else if (keyword == "location") {
-            intent += "City";
+            intent += "City [Hint: " + StringHelper::capitalize_first_char(attr[keyword]) + ']';
         }else if (keyword == "time") {
-            intent += "[Optionally: Time]";
+            intent += "Time [Hint: " + StringHelper::capitalize_first_char(attr[keyword]) + ']';
         }
         // Not implemented, but an example for extending the extracted attributes.
         else if (keyword == "directions") {
-            intent += "[Optionally: Destination]";
+            intent += "";
+            //intent += "[Optionally: Destination]";
         }
     }
     if (attr.find("topic") == attr.end() || intent == "") {
         return "No intent was detected in the string.";
     }
-    return "(Intent: Get" + intent + ")";
+    if (intent[intent.size() - 1] == ' ') {
+        intent[intent.size() - 1] = ')';
+    } else intent += ')';
+    return "(Intent: Get" + intent;
 }
