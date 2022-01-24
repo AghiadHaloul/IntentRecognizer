@@ -12,9 +12,15 @@
 using namespace std;
 
 unordered_map<string, string> TextAnalyser::get_attributes(const string& input) {
+    // This hash table will contain the intent of the query
     unordered_map<string, string> attributes;
+
     vector<string> words_vec;
+
+    // Convert the sentence into a vector of words
     StringHelper::string_to_words_vec(input, words_vec);
+
+    // Iterate over the words in the query, try to match one-or-more words with our dictioaries.
     for (int i = 0; i < words_vec.size(); i++) {
         string w = words_vec[i];
         // Skip, if the word is in the stop words list
@@ -67,25 +73,25 @@ unordered_map<string, string> TextAnalyser::get_attributes(const string& input) 
 }
 
 TextAnalyser::TextAnalyser() {
-    topics_list = {"weather", "fact", "directions", "reminder", "joke"}; // Can be read & extended from a file.
-    times_list = {"today", "now", "tomorrow", "o'clock", "Uhr"}; // Can be read & extended from a file.
+    // Load the different topics, cities, - possibly radio stations, heating - commands
+    load_from_file("../data/topics_keywords.txt", topics_list); // Can be scaled & extended from a file.
+    load_from_file("../data/time_keywords.txt",times_list); // Can be scaled & extended from a file.
+    load_from_file("../data/stopwords/stop_words_en.txt",stop_words); // Can be scaled & extended from a file.
 
-    // Load cities from file
-    fstream file_stream("../data/opendatasoft/names_coordinates.csv");
-    if (!file_stream.is_open()) {
-        throw runtime_error("Could not open cities_list file.");
-    }
-    string line, word;
-    // Iterate through the lines in the CSV file
-    while(getline(file_stream, line)) {
-        stringstream s_str(line);
+    // temporary list that will contain csv entries (city_name -> coordinates)
+    unordered_set<string> file_lines;
+    load_from_file("../data/opendatasoft/names_coordinates.csv",file_lines); // Can be scaled & extended from a file.
+
+    // Iterate through the lines in the CSV file and keep only the first column
+    for(auto& line : file_lines) {
         vector<string> csv_line;
+        stringstream s_str(line);
+        string word;
         while(getline(s_str, word, ';')) {
             csv_line.push_back(word);
         }
-
         // Clean the city names (Clausthal-Zellerfeld -> "Clausthal Zellerfeld")
-        string city_ascii = clean(csv_line[0]);
+        string city_ascii = StringHelper::clean(csv_line[0]);
         locations_list.insert(city_ascii);
 
         // If the city name has multiple words, group them by the first one
@@ -98,43 +104,19 @@ TextAnalyser::TextAnalyser() {
             multiword_locations_list[first_word].push_back(city_name_vec);
         }
     }
-    file_stream.close();
-
-    // Load stop words from file:
-    file_stream.open("../data/stopwords/stop_words_en.txt");
-    if (!file_stream.is_open()) {
-        throw runtime_error("Could not open stop_words_en.txt file.");
-    }
-    while(getline(file_stream, line)) {
-        stop_words.insert(line);
-    }
-    file_stream.close();
 }
 
-string TextAnalyser::clean(const string &input) {
-    string cleaned_str = "";
-    for (int i = 0; i < input.size(); i++) {
-        // Avoid repeated empty spaces
-        if(input[i] == ' ' && cleaned_str.size() > 0 && cleaned_str[cleaned_str.size() - 1] != ' ') {
-            cleaned_str += ' ';
-            continue;
-        }
-        // Ignore non-alphanumeric digits
-        if(!isalnum(input[i])) {
-            // avoid double white spaces
-            if (cleaned_str.size() > 0 && cleaned_str[cleaned_str.size() - 1] != ' ') {
-                cleaned_str += ' ';
-            }
-            continue;
-        }
-        // Convert to lower letters
-        if (isupper(input[i])) {
-            cleaned_str += tolower(input[i]);
-            continue;
-        }
-        cleaned_str += input[i];
+void TextAnalyser::load_from_file(const string& path_to_file, unordered_set<string> &list) {
+    fstream file_stream(path_to_file);
+    if (!file_stream.is_open()) {
+        throw runtime_error("Could not open the following file: " + path_to_file + ".");
     }
-    return cleaned_str;
+    string line;
+    // Iterate through the lines in the CSV file
+    while(getline(file_stream, line)) {
+        list.insert(line);
+    }
+    file_stream.close();
 }
 
 

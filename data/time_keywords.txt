@@ -1,0 +1,16 @@
+today
+now
+morning
+afternoon
+evening
+night
+yesterday
+tomorrow
+uhr
+monday
+tuesday
+wednesday
+thursday
+friday
+saturday
+sunday
